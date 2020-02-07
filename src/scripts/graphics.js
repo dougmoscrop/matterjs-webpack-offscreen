@@ -9,10 +9,8 @@ export default function startRendering(engine, canvas) {
     engine
   });
 
-  function renderLoop() {
-    Render.world(render);
+  (function renderLoop() {
     render.frameRequestId = requestAnimationFrame(renderLoop);
-  }
-  
-  render.frameRequestId = requestAnimationFrame(renderLoop);
+    Render.world(render);
+  })();
 }

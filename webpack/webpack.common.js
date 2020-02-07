@@ -1,9 +1,10 @@
 'use strict';
 
 const Path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WorkerPlugin = require('worker-plugin');
 
 const dest = Path.join(__dirname, '../dist');
 
@@ -17,13 +18,14 @@ module.exports = {
     filename: 'bundle.[hash].js'
   },
   plugins: [
-    new CleanWebpackPlugin([dest], { root: Path.resolve(__dirname, '..') }),
+    new CleanWebpackPlugin(),
     new CopyWebpackPlugin([
       { from: Path.resolve(__dirname, '../public'), to: 'public' }
     ]),
     new HtmlWebpackPlugin({
       template: Path.resolve(__dirname, '../src/index.html')
     }),
+    new WorkerPlugin(),
   ],
   resolve: {
     alias: {
@@ -32,10 +34,6 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.worker\.js$/,
-        use: { loader: 'comlink-loader' }
-      },
       {
         test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
         use: {
